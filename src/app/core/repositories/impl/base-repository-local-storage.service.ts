@@ -65,6 +65,9 @@ export class BaseRespositoryLocalStorageService<T extends Model> implements IBas
     );
   }
 
+
+  
+
   getById(id: string): Observable<T | null> {
     return of(this.mapping.getOne(this._items.find(item=>item.id == id) ?? null));
   }

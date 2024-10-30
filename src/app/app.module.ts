@@ -24,7 +24,8 @@ import { GroupSelectableComponent } from './components/group-selectable/group-se
     BrowserModule, 
     IonicModule.forRoot(), 
     AppRoutingModule,
-    ReactiveFormsModule],
+    ReactiveFormsModule,
+  ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideHttpClient(),

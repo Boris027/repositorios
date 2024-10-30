@@ -27,6 +27,7 @@ export class BaseRepositoryHttpService<T extends Model> implements IBaseReposito
     return this.http.get<T[]>(`${this.apiUrl}/${this.resource}`).pipe(map(res=>this.mapping.getPaginated(page, pageSize, 0, res)));
   }
 
+
   getById(id: string): Observable<T | null> {
     return this.http.get<T>(`${this.apiUrl}/${this.resource}/${id}`).pipe(map(res=>this.mapping.getOne(res)));
   }

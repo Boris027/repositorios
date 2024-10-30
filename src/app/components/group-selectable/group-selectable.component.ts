@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { IonInput, IonPopover } from '@ionic/angular';
+import { InfiniteScrollCustomEvent, IonInput, IonPopover } from '@ionic/angular';
 import { BehaviorSubject, Subscription, last, lastValueFrom } from 'rxjs';
 import { Group } from 'src/app/core/models/group.model';
 import { Paginated } from 'src/app/core/models/paginated.model';
@@ -24,6 +24,8 @@ export class GroupSelectableComponent  implements OnInit, ControlValueAccessor, 
   private _groups:BehaviorSubject<Group[]> = new BehaviorSubject<Group[]>([]);
   public groups$ = this._groups.asObservable();
   pagination!:Paginated<Group>;
+  private pagesize=5
+
 
   propagateChange = (obj: any) => {}
 
@@ -42,9 +44,21 @@ export class GroupSelectableComponent  implements OnInit, ControlValueAccessor, 
   }
 
   private async loadGroups(filter:string){
-    this.gropsSvc.getAll().subscribe({
+    this.gropsSvc.getAll(1,this.pagesize).subscribe({
       next:response=>{
-        this._groups.next([...response]);
+        this.pagination=response
+        this._groups.next([...response.data]);
+      },
+      error:err=>{}
+    }) 
+  }
+
+  private async loadGroupsmore(page:number,pageSize:number){
+    this.gropsSvc.getAll(page,pageSize).subscribe({
+      next:response=>{
+        this.pagination=response;
+        const content=this._groups.getValue()
+        this._groups.next([...content,...response.data]);
       },
       error:err=>{}
     }) 
@@ -77,13 +91,27 @@ export class GroupSelectableComponent  implements OnInit, ControlValueAccessor, 
     this.disabled = isDisabled;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+
+  }
 
   private async filter(filtering:string){
-    this.loadGroups(filtering);
+
+    if(filtering!=""){
+      let groups:Group[]=[]
+      this.gropsSvc.getAll().subscribe({
+        next:(value)=>{
+          groups=value.filter(c=>c.name.includes(filtering))
+          this._groups.next(groups)
+        },
+      })
+    }else{
+      this.loadGroups(filtering);
+    }
   }
 
   onFilter(evt:any){
+
     this.filter(evt.detail.value);
   }
 
@@ -101,5 +129,20 @@ export class GroupSelectableComponent  implements OnInit, ControlValueAccessor, 
     this.selectGroup(undefined, true);
     if(popover)
       popover.dismiss();
+  }
+
+  onIonInfinite(event:InfiniteScrollCustomEvent){
+    /*if(this.actualpage<this.totalpages){
+      this.actualpage+=1
+      this.loadGroupsmore(this.actualpage,this.pagesize)
+      event.target.complete()
+    }*/
+
+      if((this.pagination.page)<(this.pagination.pages)){
+        this.loadGroupsmore((this.pagination.page+1),this.pagesize)
+
+      }
+
+      event.target.complete()
   }
 }
