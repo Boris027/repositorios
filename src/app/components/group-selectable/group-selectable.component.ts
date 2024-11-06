@@ -127,6 +127,9 @@ export class GroupSelectableComponent  implements OnInit, ControlValueAccessor, 
   }
 
   deselect(popover:IonPopover|null=null){
+    if (this.propagateChange) {
+      this.propagateChange(null);  // Aquí propagamos el cambio para el form control
+    }
     this.selectGroup(undefined, true);
     if(popover)
       popover.dismiss();

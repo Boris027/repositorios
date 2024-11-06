@@ -44,12 +44,13 @@ export class PersonModalComponent  implements OnInit {
       email:['', [Validators.required, Validators.email]],
       gender:['', [Validators.required]],
       age:['', [Validators.pattern(/^\d+$/)]],
-      groupId:[null, [Validators.required]]
+      groupId:[null]
     });
   }
   
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   get name(){
     return this.formGroup.controls['name'];
@@ -89,7 +90,7 @@ export class PersonModalComponent  implements OnInit {
       this.modalCtrl.dismiss(
           (this.mode=='new'?
             this.formGroup.value:
-            this.getDirtyValues(this.formGroup)), this.mode
+            this.formGroup.value), this.mode
       );
     } else {
       console.log('Formulario inválido');
