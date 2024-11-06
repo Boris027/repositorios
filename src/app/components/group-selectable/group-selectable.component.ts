@@ -101,7 +101,6 @@ export class GroupSelectableComponent  implements OnInit, ControlValueAccessor, 
       let groups:Group[]=[]
       this.gropsSvc.getAll().subscribe({
         next:(value)=>{
-          console.log(value)
           groups=value.filter(c=>c.name.includes(filtering))
           this._groups.next(groups)
         },

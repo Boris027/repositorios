@@ -152,7 +152,8 @@ export class PeoplePage implements OnInit {
             next:res=>{
               this.refresh();
             },
-            error:err=>{}
+            error:err=>{
+            }
           });
           break;
         default:
@@ -171,7 +172,8 @@ export class PeoplePage implements OnInit {
     if(evt.detail.role=='yes')
       this.peopleSvc.delete(person.id).subscribe({
         next:response=>{
-          this.getMorePeople();
+          //this.getMorePeople();
+          this.refresh();
         },
         error:err=>{}
       });

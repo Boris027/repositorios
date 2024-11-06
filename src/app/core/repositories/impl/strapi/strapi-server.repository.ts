@@ -39,12 +39,11 @@ import { Paginated } from "src/app/core/models/paginated.model";
       }
 
       override add(entity: T): Observable<T> {
-        return this.http.post<T>(`${this.apiUrl}/${this.resource}`, this.mapping.setAdd(entity)).pipe(map(res=>this.mapping.getAdded(res)));
+        return this.http.post<T>(`${this.apiUrl}/${this.resource}`, this.mapping.setAdd(entity)).pipe(map(res=>this.mapping.getUpdated(res)));
       }
 
       override update(id: string, entity: T): Observable<T> {
-        console.log(entity)
-        return this.http.put<T>(`${this.apiUrl}/${this.resource}/${id}`, this.mapping.setAdd(entity)).pipe(map(res=>this.mapping.getAdded(res)));
+        return this.http.put<T>(`${this.apiUrl}/${this.resource}/${id}`, this.mapping.setAdd(entity)).pipe(map(res=>this.mapping.getUpdated(res)));
       }
 
       

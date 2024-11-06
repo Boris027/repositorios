@@ -26,7 +26,7 @@ export class GroupMappingStrapiServer implements IBaseMapping<Group>{
         const grupo:Group={
             id:datafinal.id+"",
             name:datafinal.attributes.nombre,
-            picture:""
+            
         }
         return grupo
     }

@@ -20,6 +20,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { GroupSelectableComponent } from './components/group-selectable/group-selectable.component';
 import { GroupMappingStrapiServer } from './core/repositories/impl/strapi/groups-mapping-strapi-server.service';
 import { PeopleMappingStrapiServer } from './core/repositories/impl/strapi/people-mapping-strapi-server.service';
+import { StrapiServerRepositoryService } from './core/repositories/impl/strapi/strapi-server.repository';
 @NgModule({
   declarations: [AppComponent, PersonModalComponent, GroupSelectableComponent],
   imports: [
