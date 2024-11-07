@@ -96,7 +96,6 @@ export class GroupSelectableComponent  implements OnInit, ControlValueAccessor, 
   }
 
   private async filter(filtering:string){
-
     if(filtering!=""){
       let groups:Group[]=[]
       this.gropsSvc.getAll().subscribe({

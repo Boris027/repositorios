@@ -29,7 +29,13 @@ import { Paginated } from "src/app/core/models/paginated.model";
         if(page!=-1){
           return this.http.get<Paginated<T>>(`${this.apiUrl}/${this.resource}?populate=${resource2final}&sort[0]=id&pagination[page]=${page}&pagination[pageSize]=${pageSize}`).pipe(map(res=>this.mapping.getPaginated(page, pageSize, 0, res)));
         }else{
-          return this.http.get<Paginated<T>>(`${this.apiUrl}/${this.resource}?populate=${resource2final}&sort[0]=id&pagination[page]=${page}&pagination[pageSize]=${pageSize}`).pipe(map(res=>this.mapping.getPaginated(page, pageSize, 0, res)));
+          return this.http.get<Paginated<T>>
+          (`${this.apiUrl}/${this.resource}?populate=${resource2final}`)
+          .pipe(map(res=>{
+            return res.data.map((elem:any)=>{
+              return this.mapping.getOne(elem);
+            });
+          }));
         }
         
       }
