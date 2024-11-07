@@ -30,6 +30,7 @@ export class PeoplePage implements OnInit {
   portsSubscription!: Subscription;
   _people:BehaviorSubject<Person[]> = new BehaviorSubject<Person[]>([]);
   people$:Observable<Person[]> = this._people.asObservable();
+  pagination:Paginated<Person> | undefined
   public alertYesNoButtons = [
     {
       text: 'No',
@@ -59,10 +60,11 @@ export class PeoplePage implements OnInit {
   selectedPerson: any = null;
   isAnimating = false;
   page:number = 1;
-  pageSize:number = 25;
+  pageSize:number = 4;
 
 
   refresh(){
+    this.pagination!.pages=1;
     this.page=1;
     this.peopleSvc.getAll(this.page, this.pageSize).subscribe({
       next:(response:Paginated<Person>)=>{
@@ -74,6 +76,7 @@ export class PeoplePage implements OnInit {
   getMorePeople(notify:HTMLIonInfiniteScrollElement | null = null) {
     this.peopleSvc.getAll(this.page, this.pageSize).subscribe({
       next:(response:Paginated<Person>)=>{
+        this.pagination=response;
         this._people.next([...this._people.value, ...response.data]);
         this.page++;
         notify?.complete();
@@ -122,7 +125,11 @@ export class PeoplePage implements OnInit {
   }
 
   onIonInfinite(ev:InfiniteScrollCustomEvent) {
-    this.getMorePeople(ev.target);
+    if(this.pagination!?.page<this.pagination!?.pages){
+      this.getMorePeople(ev.target);
+    }else{
+      ev.target.complete();
+    }
     
   }
 
@@ -150,6 +157,7 @@ export class PeoplePage implements OnInit {
         case 'edit':
           this.peopleSvc.update(person!.id, response.data).subscribe({
             next:res=>{
+              
               this.refresh();
             },
             error:err=>{

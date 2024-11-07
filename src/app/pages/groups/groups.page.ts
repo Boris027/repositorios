@@ -18,7 +18,7 @@ export class GroupsPage implements OnInit {
 
   constructor(
     private animationCtrl: AnimationController,
-    private groupsSvc:MyGroupsService
+    private groupsSvc:GroupsService
   ) {}
 
   ngOnInit(): void {

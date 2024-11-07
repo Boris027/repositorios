@@ -27,9 +27,9 @@ import { Paginated } from "src/app/core/models/paginated.model";
       override getAll(page:number, pageSize:number): Observable<T[] | Paginated<T>> {
         const resource2final=this.resource2.substring(0,this.resource2.length-1)
         if(page!=-1){
-          return this.http.get<Paginated<T>>(`${this.apiUrl}/${this.resource}?populate=${resource2final}`).pipe(map(res=>this.mapping.getPaginated(page, pageSize, 0, res)));
+          return this.http.get<Paginated<T>>(`${this.apiUrl}/${this.resource}?populate=${resource2final}&sort[0]=id&pagination[page]=${page}&pagination[pageSize]=${pageSize}`).pipe(map(res=>this.mapping.getPaginated(page, pageSize, 0, res)));
         }else{
-          return this.http.get<Paginated<T>>(`${this.apiUrl}/${this.resource}?populate=${resource2final}`).pipe(map(res=>this.mapping.getPaginated(page, pageSize, 0, res)));
+          return this.http.get<Paginated<T>>(`${this.apiUrl}/${this.resource}?populate=${resource2final}&sort[0]=id&pagination[page]=${page}&pagination[pageSize]=${pageSize}`).pipe(map(res=>this.mapping.getPaginated(page, pageSize, 0, res)));
         }
         
       }
